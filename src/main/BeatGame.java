@@ -2,19 +2,19 @@ package main;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import music.Music;
 
@@ -55,6 +55,8 @@ public class BeatGame extends JFrame {
 
 	private Music selectedMusic = new Music("Razihel - Love U.mp3", true);
 
+	private JPanel panel = (JPanel) getContentPane();
+	
 	private boolean isMain = false;
 
 	private boolean isInGame = false;
@@ -80,11 +82,13 @@ public class BeatGame extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		panel.setBounds(10,10,Main.SCREEN_WIDTH, Main.SCRREN_HEIGHT);
 		setVisible(true);
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
 
-		addKeyListener(new KeyListener());
+		game.addKeyBind(panel);
 		
 		// Update musics in track list
 		trackList.add(new Track("Joakim Karud - Mighty Love (preview).jpg", "MightyLove.png",

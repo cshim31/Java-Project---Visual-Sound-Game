@@ -5,8 +5,14 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 public class Game extends Thread {
 	private Image gameInfoImage = new ImageIcon(getClass().getResource("../img/gameinfo.png")).getImage();
@@ -22,6 +28,8 @@ public class Game extends Thread {
 	private Image noteRouteSPACEImage = new ImageIcon(getClass().getResource("../img/noteRoute.png")).getImage();
 	private Image noteRouteENTERImage = new ImageIcon(getClass().getResource("../img/noteRoute.png")).getImage();
 	
+	private InputMap im;
+	private ActionMap am;
 	public void screenDraw(Graphics2D g) {
 		g.drawImage(noteRouteQImage, 332, 0, null);
 		g.drawImage(noteRouteWImage, 436, 0, null);
@@ -61,6 +69,37 @@ public class Game extends Thread {
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Elephant", Font.BOLD, 30));
 		g.drawString("000000", 1000, 40);
+	}
+	
+	public void addKeyBind(JPanel panel) {
+		this.im = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		this.am = panel.getActionMap();
+		
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Q, 0), KeyAction.Action.Q_PRESSED);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), KeyAction.Action.W_PRESSED);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_E, 0), KeyAction.Action.E_PRESSED);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, 0), KeyAction.Action.R_PRESSED);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), KeyAction.Action.SPACE_PRESSED);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), KeyAction.Action.ENTER_PRESSED);
+		im.put(KeyStroke.getKeyStroke("released Q"), KeyAction.Action.Q_RELEASED);
+		im.put(KeyStroke.getKeyStroke("released W"), KeyAction.Action.W_RELEASED);
+		im.put(KeyStroke.getKeyStroke("released E"), KeyAction.Action.E_RELEASED);
+		im.put(KeyStroke.getKeyStroke("released R"), KeyAction.Action.R_RELEASED);
+		im.put(KeyStroke.getKeyStroke("released SPACE"), KeyAction.Action.SPACE_RELEASED);
+		im.put(KeyStroke.getKeyStroke("released ENTER"), KeyAction.Action.ENTER_RELEASED);
+		
+		am.put(KeyAction.Action.Q_PRESSED, new KeyAction(KeyAction.Action.Q_PRESSED));
+		am.put(KeyAction.Action.W_PRESSED, new KeyAction(KeyAction.Action.W_PRESSED));
+		am.put(KeyAction.Action.E_PRESSED, new KeyAction(KeyAction.Action.E_PRESSED));
+		am.put(KeyAction.Action.R_PRESSED, new KeyAction(KeyAction.Action.R_PRESSED));
+		am.put(KeyAction.Action.SPACE_PRESSED, new KeyAction(KeyAction.Action.SPACE_PRESSED));
+		am.put(KeyAction.Action.ENTER_PRESSED, new KeyAction(KeyAction.Action.ENTER_PRESSED));
+		am.put(KeyAction.Action.Q_RELEASED, new KeyAction(KeyAction.Action.Q_RELEASED));
+		am.put(KeyAction.Action.W_RELEASED, new KeyAction(KeyAction.Action.W_RELEASED));
+		am.put(KeyAction.Action.E_RELEASED, new KeyAction(KeyAction.Action.E_RELEASED));
+		am.put(KeyAction.Action.R_RELEASED, new KeyAction(KeyAction.Action.R_RELEASED));
+		am.put(KeyAction.Action.SPACE_RELEASED, new KeyAction(KeyAction.Action.SPACE_RELEASED));
+		am.put(KeyAction.Action.ENTER_RELEASED, new KeyAction(KeyAction.Action.ENTER_RELEASED));
 	}
 	
 	public void pressQ() {

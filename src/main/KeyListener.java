@@ -1,3 +1,8 @@
+/*
+ * This class has been alternated with KeyAction class
+ */
+
+/*
 package main;
 
 import java.awt.event.KeyAdapter;
@@ -43,3 +48,4 @@ public class KeyListener extends KeyAdapter {
 	}
 
 }
+*/
