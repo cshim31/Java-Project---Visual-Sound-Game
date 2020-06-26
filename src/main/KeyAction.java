@@ -9,7 +9,7 @@ import javax.swing.Action;
 public class KeyAction extends AbstractAction{
 	
 	enum Action {
-		Q_PRESSED, W_PRESSED, E_PRESSED, R_PRESSED, SPACE_PRESSED, ENTER_PRESSED,
+		Q_PRESSED, W_PRESSED, E_PRESSED, R_PRESSED, SPACE_PRESSED, ENTER_PRESSED, ESC_PRESSED,
 		Q_RELEASED, W_RELEASED, E_RELEASED, R_RELEASED, SPACE_RELEASED, ENTER_RELEASED;
 	}
 	
@@ -57,6 +57,9 @@ public class KeyAction extends AbstractAction{
 			break;
 		case ENTER_RELEASED :
 			BeatGame.game.releaseENTER();
+			break;
+		case ESC_PRESSED :
+			BeatGame.game.pressESC();
 			break;
 		}
 	}

@@ -1,19 +1,21 @@
 package main;
 
 public class Track {
-	private String musicImage;
-	private String musicTitle;
-	private String musicPreview;
-	private String gameImage;
-	private String gameMusic;
+	private String musicImage;	// Preview image on selected
+	private String musicTitle;	// Preview title image on selected
+	private String musicPreview;// Preview Music on selected
+	private String gameImage;	// In - Game Music Image
+	private String gameMusic;	// In - Game Music 
+	private String titleName; 	// Music Title
 	
-	public Track(String musicImage, String musicTitle, String musicPreview, String gameImage, String gameMusic) {
+	public Track(String musicImage, String musicTitle, String musicPreview, String gameImage, String gameMusic, String titleName) {
 		super();
 		this.musicImage = musicImage;
 		this.musicTitle = musicTitle;
 		this.musicPreview = musicPreview;
 		this.gameImage = gameImage;
 		this.gameMusic = gameMusic;
+		this.titleName = titleName;
 	}
 	
 	public String getMusicImage() {
@@ -46,5 +48,10 @@ public class Track {
 	public void setGameMusic(String gameMusic) {
 		this.gameMusic = gameMusic;
 	}
-	
+	public String getTitleName() {
+		return titleName;
+	}
+	public void setTitleName(String titleName) {
+		this.titleName = titleName;
+	}
 }

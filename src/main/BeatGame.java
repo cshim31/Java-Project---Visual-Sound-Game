@@ -23,17 +23,20 @@ public class BeatGame extends JFrame {
 	// Main interfaces and components
 	private Image background = new ImageIcon(Main.class.getResource("../img/intro_background (revised).png"))
 			.getImage();
-	private ImageIcon gameExitButtonExited = new ImageIcon(getClass().getResource("../img/gameExitButton.png"));
-	private ImageIcon gameExitButtonEntered = new ImageIcon(getClass().getResource("../img/gameExitButtonEntered.png"));
+	private ImageIcon exitGameButtonExited = new ImageIcon(getClass().getResource("../img/gameExitButton.png"));
+	private ImageIcon exitGameButtonEntered = new ImageIcon(getClass().getResource("../img/gameExitButtonEntered.png"));
 	private ImageIcon startButtonImage = new ImageIcon(getClass().getResource("../img/GameStartButton.png"));
 	private ImageIcon quitButtonImage = new ImageIcon(getClass().getResource("../img/GameQuitButton.png"));
 	private ImageIcon startButtonImageEntered = new ImageIcon(
 			getClass().getResource("../img/GameStartButtonEntered.png"));
 	private ImageIcon quitButtonImageEntered = new ImageIcon(
 			getClass().getResource("../img/GameQuitButtonEntered.png"));
-
-	private JButton gameExitButton = new JButton(gameExitButtonExited);
-	private JButton gameStartButton = new JButton(startButtonImage);
+	private ImageIcon menubarMainImage = new ImageIcon(Main.class.getResource("../img/menubarMainImage.png"));
+	private ImageIcon menubarInGameImage = new ImageIcon(getClass().getResource("../img/menubarInGameImage.png"));		
+	
+	
+	private JButton exitGameButton = new JButton(exitGameButtonExited);
+	private JButton startGameButton = new JButton(startButtonImage);
 
 	// Music Selection interfaces and components
 	private ImageIcon toMainImage = new ImageIcon(getClass().getResource("../img/ToMainButton.png"));
@@ -49,14 +52,14 @@ public class BeatGame extends JFrame {
 	private JButton selectRightButton = new JButton(selectRight);
 	private JButton easyModeButton = new JButton(easyModeImage);
 	private JButton hardModeButton = new JButton(hardModeImage);
-		
-	private JLabel menubar = new JLabel(new ImageIcon(Main.class.getResource("../img/menubar3.png")));
 	private JButton gameQuitButton = new JButton(quitButtonImage);
+	
+	private JLabel menubar = new JLabel(menubarMainImage);
 
 	private Music selectedMusic = new Music("Razihel - Love U.mp3", true);
-
-	private JPanel panel = (JPanel) getContentPane();
 	
+	private JPanel keyActionComponent = (JPanel) getContentPane();		// JComponent for Key binding
+
 	private boolean isMain = false;
 
 	private boolean isInGame = false;
@@ -68,13 +71,13 @@ public class BeatGame extends JFrame {
 	private Graphics screenGraphic;
 
 	private int mouseX, mouseY;
-	
+
 	private Image screenImage;
 	private Image songImage;
 	private Image songTitle;
 
 	public static Game game = new Game();
-	
+
 	public BeatGame() {
 		setUndecorated(true);
 		setTitle("Visual Sound");
@@ -82,40 +85,41 @@ public class BeatGame extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		panel.setBounds(10,10,Main.SCREEN_WIDTH, Main.SCRREN_HEIGHT);
+
+		keyActionComponent.setBounds(10, 10, Main.SCREEN_WIDTH, Main.SCRREN_HEIGHT);
 		setVisible(true);
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
 
-		game.addKeyBind(panel);
-		
+		game.addKeyBind(keyActionComponent);
+
 		// Update musics in track list
 		trackList.add(new Track("Joakim Karud - Mighty Love (preview).jpg", "MightyLove.png",
 				"Mighty Love - Joakim Karud (preview).mp3", "Joakim Karud - Mighty Love.jpg",
-				"Mighty Love - Joakim Karud.mp3"));
+				"Mighty Love - Joakim Karud.mp3", "Joakim Karud - Might Love"));
 		trackList.add(new Track("Vendredi - Follow Me (preview).jpg", "YellowHeartsTitle.png",
-				"Follow Me - Vendredi (preview).mp3", "Vendredi - Follow Me.jpg", "Follow Me - Vendredi.mp3"));
+				"Follow Me - Vendredi (preview).mp3", "Vendredi - Follow Me.jpg", "Follow Me - Vendredi.mp3",
+				"Vendredi - Follow me"));
 		trackList.add(new Track("Ant Saunders - Yellow Hearts (preview).jpg", "FollowmeTitle.png",
 				"Ant Saunders - Yellow Hearts (preview).mp3", "Ant Saunders - Yellow Hearts.jpg",
-				"Ant Saunders - Yellow Hearts.mp3"));
+				"Ant Saunders - Yellow Hearts.mp3", "Ant Saunders - Yellow Hearts"));
 		// Load Interface
-		gameExitButton.setBounds(1250, 0, 30, 30);
-		gameExitButton.setBorderPainted(false);
-		gameExitButton.setContentAreaFilled(false);
-		gameExitButton.setFocusPainted(false);
+		exitGameButton.setBounds(1250, 0, 30, 30);
+		exitGameButton.setBorderPainted(false);
+		exitGameButton.setContentAreaFilled(false);
+		exitGameButton.setFocusPainted(false);
 
-		gameExitButton.addMouseListener(new MouseAdapter() {
+		exitGameButton.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {
 				Music buttonEnteredSound = new Music("../music/mouseEntered.mp3", false);
 				buttonEnteredSound.start();
-				gameExitButton.setIcon(gameExitButtonEntered);
-				gameExitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				exitGameButton.setIcon(exitGameButtonEntered);
+				exitGameButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
 			public void mouseExited(MouseEvent e) {
-				gameExitButton.setIcon(gameExitButtonExited);
-				gameExitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				exitGameButton.setIcon(exitGameButtonExited);
+				exitGameButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 
 			public void mousePressed(MouseEvent e) {
@@ -130,7 +134,7 @@ public class BeatGame extends JFrame {
 				}
 			}
 		});
-		add(gameExitButton);
+		add(exitGameButton);
 
 		gameQuitButton.setBounds(20, 420, 300, 77);
 		gameQuitButton.setBorderPainted(false);
@@ -187,8 +191,8 @@ public class BeatGame extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music buttonPressedSound = new Music("../music/mousePressed.mp3", false);
 				buttonPressedSound.start();
-				disenableMainComponents();
-				enableIntroComponents();
+				disenableInGameComponents();
+				enableMainComponents();
 				selectMain();
 			}
 		});
@@ -272,7 +276,7 @@ public class BeatGame extends JFrame {
 				buttonPressedSound.start();
 
 				// Event
-				gameStart(nowSelected, "easy");
+				startGame(nowSelected, "Easy");
 			}
 		});
 
@@ -301,28 +305,28 @@ public class BeatGame extends JFrame {
 				buttonPressedSound.start();
 
 				// Event
-				gameStart(nowSelected, "hard");
+				startGame(nowSelected, "Hard");
 			}
 		});
 
 		add(hardModeButton);
 
-		gameStartButton.setBounds(20, 325, 300, 77);
-		gameStartButton.setBorderPainted(false);
-		gameStartButton.setContentAreaFilled(false);
-		gameStartButton.setFocusPainted(false);
+		startGameButton.setBounds(20, 325, 300, 77);
+		startGameButton.setBorderPainted(false);
+		startGameButton.setContentAreaFilled(false);
+		startGameButton.setFocusPainted(false);
 
-		gameStartButton.addMouseListener(new MouseAdapter() {
+		startGameButton.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {
 				Music buttonEnteredSound = new Music("../music/mouseEntered.mp3", false);
 				buttonEnteredSound.start();
-				gameStartButton.setIcon(startButtonImageEntered);
-				gameStartButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				startGameButton.setIcon(startButtonImageEntered);
+				startGameButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
 			public void mouseExited(MouseEvent e) {
-				gameStartButton.setIcon(startButtonImage);
-				gameStartButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				startGameButton.setIcon(startButtonImage);
+				startGameButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 
 			// Turn off main music and play music in track list
@@ -338,7 +342,7 @@ public class BeatGame extends JFrame {
 			}
 		});
 
-		add(gameStartButton);
+		add(startGameButton);
 
 		menubar.setBounds(0, 0, 1280, 30);
 
@@ -441,10 +445,11 @@ public class BeatGame extends JFrame {
 	public void toMain() {
 		disenableInGameComponents();
 		enableMainComponents();
+		selectTrack(nowSelected);
 	}
 
 	// Load Game Screen
-	public void gameStart(int nowSelected, String difficulty) {
+	public void startGame(int nowSelected, String difficulty) {
 		if (selectedMusic != null) {
 			selectedMusic.close();
 		}
@@ -452,10 +457,13 @@ public class BeatGame extends JFrame {
 		disenableMainComponents();
 		background = new ImageIcon(getClass().getResource("../img/" + trackList.get(nowSelected).getGameImage()))
 				.getImage();
+		menubar.setIcon(menubarInGameImage);
+		toMainButton.setVisible(true);
 		selectedMusic = new Music(trackList.get(nowSelected).getGameMusic(), false);
 		selectedMusic.start();
 		isInGame = true;
 		setFocusable(true);
+		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic());
 	}
 
 	/*
@@ -471,18 +479,19 @@ public class BeatGame extends JFrame {
 		this.isInGame = false;
 		this.selectedMusic = new Music("Razihel - Love U.mp3", true);
 		this.background = new ImageIcon(Main.class.getResource("../img/intro_background (revised).png")).getImage();
-		this.gameStartButton.setVisible(true);
+		this.startGameButton.setVisible(true);
 		this.gameQuitButton.setVisible(true);
 		this.menubar.setVisible(true);
-		this.gameExitButton.setVisible(true);
-		this.toMainButton.setVisible(true);
+		this.toMainButton.setVisible(false);
+		this.exitGameButton.setVisible(true);
 		this.selectedMusic.start();
 	}
 
 	public void disenableIntroComponents() {
 		this.isMain = true;
-		this.gameStartButton.setVisible(false);
+		this.startGameButton.setVisible(false);
 		this.gameQuitButton.setVisible(false);
+		this.toMainButton.setVisible(false);
 		selectedMusic.close();
 	}
 
@@ -491,41 +500,29 @@ public class BeatGame extends JFrame {
 		this.isMain = true;
 		this.isInGame = false;
 		this.background = new ImageIcon(getClass().getResource("../img/music_background.jpg")).getImage();
-		this.toMainButton.setVisible(true);
 		this.selectLeftButton.setVisible(true);
 		this.selectRightButton.setVisible(true);
 		this.easyModeButton.setVisible(true);
 		this.hardModeButton.setVisible(true);
 		this.menubar.setVisible(true);
-		this.gameExitButton.setVisible(true);
-		this.toMainButton.setVisible(true);
+		this.exitGameButton.setVisible(true);
 	}
 
 	public void disenableMainComponents() {
-		this.isMain = false;
-		this.toMainButton.setVisible(false);
 		this.selectLeftButton.setVisible(false);
 		this.selectRightButton.setVisible(false);
 		this.easyModeButton.setVisible(false);
 		this.hardModeButton.setVisible(false);
-		this.gameExitButton.setVisible(false);
-		this.toMainButton.setVisible(false);
+		this.exitGameButton.setVisible(false);
 		this.selectedMusic.close();
 	}
 
 	public void disenableInGameComponents() {
-		this.menubar.setVisible(true);
-		this.gameExitButton.setVisible(true);
-		this.toMainButton.setVisible(true);
-	}
-
-	// Game Play Screen
-	public void enableGameComponents() {
-
-	}
-
-	public void disenableGameComponents() {
-
+		this.exitGameButton.setVisible(true);
+		this.toMainButton.setVisible(false);
+		this.menubar.setIcon(menubarMainImage);
+		isInGame = false;
+		game.close();
 	}
 
 }
