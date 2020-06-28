@@ -79,6 +79,17 @@ public class BeatGame extends JFrame {
 	public static Game game = new Game();
 
 	public BeatGame() {
+		// Update musics in track list
+		trackList.add(new Track("Joakim Karud - Mighty Love (preview).jpg", "MightyLove.png",
+				"Mighty Love - Joakim Karud (preview).mp3", "Joakim Karud - Mighty Love.jpg",
+				"Mighty Love - Joakim Karud.mp3", "Joakim Karud - Might Love"));
+		trackList.add(new Track("Vendredi - Follow Me (preview).jpg", "YellowHeartsTitle.png",
+				"Follow Me - Vendredi (preview).mp3", "Vendredi - Follow Me.jpg", "Follow Me - Vendredi.mp3",
+				"Vendredi - Follow me"));
+		trackList.add(new Track("Ant Saunders - Yellow Hearts (preview).jpg", "FollowmeTitle.png",
+				"Ant Saunders - Yellow Hearts (preview).mp3", "Ant Saunders - Yellow Hearts.jpg",
+				"Ant Saunders - Yellow Hearts.mp3", "Ant Saunders - Yellow Hearts"));
+		
 		setUndecorated(true);
 		setTitle("Visual Sound");
 		setSize(Main.SCREEN_WIDTH, Main.SCRREN_HEIGHT);
@@ -90,19 +101,6 @@ public class BeatGame extends JFrame {
 		setVisible(true);
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
-
-		game.addKeyBind(keyActionComponent);
-
-		// Update musics in track list
-		trackList.add(new Track("Joakim Karud - Mighty Love (preview).jpg", "MightyLove.png",
-				"Mighty Love - Joakim Karud (preview).mp3", "Joakim Karud - Mighty Love.jpg",
-				"Mighty Love - Joakim Karud.mp3", "Joakim Karud - Might Love"));
-		trackList.add(new Track("Vendredi - Follow Me (preview).jpg", "YellowHeartsTitle.png",
-				"Follow Me - Vendredi (preview).mp3", "Vendredi - Follow Me.jpg", "Follow Me - Vendredi.mp3",
-				"Vendredi - Follow me"));
-		trackList.add(new Track("Ant Saunders - Yellow Hearts (preview).jpg", "FollowmeTitle.png",
-				"Ant Saunders - Yellow Hearts (preview).mp3", "Ant Saunders - Yellow Hearts.jpg",
-				"Ant Saunders - Yellow Hearts.mp3", "Ant Saunders - Yellow Hearts"));
 		// Load Interface
 		exitGameButton.setBounds(1250, 0, 30, 30);
 		exitGameButton.setBorderPainted(false);
@@ -191,9 +189,7 @@ public class BeatGame extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music buttonPressedSound = new Music("../music/mousePressed.mp3", false);
 				buttonPressedSound.start();
-				disenableInGameComponents();
-				enableMainComponents();
-				selectMain();
+				toMain();
 			}
 		});
 
@@ -388,11 +384,19 @@ public class BeatGame extends JFrame {
 			game.screenDraw(g);
 		}
 		paintComponents(g);
+		try {
+			Thread.sleep(5);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.repaint();
 	}
 
 	// Show track list in left direction and play the music
 	public void selectLeft() {
+		if(selectedMusic != null) {
+			selectedMusic.close();
+		}
 		if (nowSelected > 0) {
 			--nowSelected;
 		} else {
@@ -403,6 +407,9 @@ public class BeatGame extends JFrame {
 
 	// Show track list in right direction and play the music
 	public void selectRight() {
+		if(selectedMusic != null) {
+			selectedMusic.close();
+		}
 		if (nowSelected < trackList.size() - 1) {
 			++nowSelected;
 		} else {
@@ -453,7 +460,6 @@ public class BeatGame extends JFrame {
 		if (selectedMusic != null) {
 			selectedMusic.close();
 		}
-
 		disenableMainComponents();
 		background = new ImageIcon(getClass().getResource("../img/" + trackList.get(nowSelected).getGameImage()))
 				.getImage();
@@ -462,8 +468,10 @@ public class BeatGame extends JFrame {
 		selectedMusic = new Music(trackList.get(nowSelected).getGameMusic(), false);
 		selectedMusic.start();
 		isInGame = true;
-		setFocusable(true);
 		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic());
+		game.addKeyBind(keyActionComponent);
+		game.start();
+		setFocusable(true);
 	}
 
 	/*
@@ -481,7 +489,6 @@ public class BeatGame extends JFrame {
 		this.background = new ImageIcon(Main.class.getResource("../img/intro_background (revised).png")).getImage();
 		this.startGameButton.setVisible(true);
 		this.gameQuitButton.setVisible(true);
-		this.menubar.setVisible(true);
 		this.toMainButton.setVisible(false);
 		this.exitGameButton.setVisible(true);
 		this.selectedMusic.start();
@@ -504,7 +511,6 @@ public class BeatGame extends JFrame {
 		this.selectRightButton.setVisible(true);
 		this.easyModeButton.setVisible(true);
 		this.hardModeButton.setVisible(true);
-		this.menubar.setVisible(true);
 		this.exitGameButton.setVisible(true);
 	}
 

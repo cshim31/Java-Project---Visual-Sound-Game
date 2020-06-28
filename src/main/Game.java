@@ -6,6 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 import javax.swing.ActionMap;
@@ -26,6 +29,9 @@ public class Game extends Thread {
 	private Image noteRouteRImage = new ImageIcon(getClass().getResource("../img/noteRoute.png")).getImage();
 	private Image noteRouteSPACEImage = new ImageIcon(getClass().getResource("../img/noteRoute.png")).getImage();
 	private Image noteRouteENTERImage = new ImageIcon(getClass().getResource("../img/noteRoute.png")).getImage();
+	private Image normalFlareImage = new ImageIcon(getClass().getResource("../img/NormalFlareImage.png")).getImage();
+	//private Image specialFlareImage = new ImageIcon(getClass().getResource("../img/SpecialFlareImage.png")).getImage();
+	
 	private InputMap im;
 	private ActionMap am;
 
@@ -36,13 +42,14 @@ public class Game extends Thread {
 
 	private ArrayList<Note> noteList = new ArrayList<Note>();
 
+	private boolean isMakingBeat = true;
+
 	public Game(String titleName, String difficulty, String musicTitle) {
 		this.titleName = titleName;
 		this.difficulty = difficulty;
 		this.musicTitle = musicTitle;
 		this.gameMusic = new Music(this.musicTitle, false);
 		gameMusic.start();
-		dropNotes(titleName);
 	}
 
 	public Game() {
@@ -64,11 +71,18 @@ public class Game extends Thread {
 		g.drawImage(noteRouteLineImage, 848, 0, null);
 		g.drawImage(noteRouteLineImage, 952, 0, null);
 		g.drawImage(judgementBar, 0, 660, null);
-		
-		for(int i = 0; i < noteList.size(); i++) {
+
+		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
-			note.screenDraw(g);
+			if(note.isProceeded()) {
+				noteList.remove(i);
+				i--;
+			}
+			else {
+				note.screenDraw(g);
+			}
 		}
+		
 		g.drawImage(gameInfoImage, 0, 0, null);
 		g.setColor(Color.WHITE);
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -86,6 +100,7 @@ public class Game extends Thread {
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Elephant", Font.BOLD, 30));
 		g.drawString("000000", 1000, 40);
+		g.drawImage(normalFlareImage, 320, 370, null);
 	}
 
 	public void addKeyBind(JComponent component) {
@@ -123,6 +138,8 @@ public class Game extends Thread {
 
 	public void pressQ() {
 		noteRouteQImage = new ImageIcon(getClass().getResource("../img/noteRouteEffect.png")).getImage();
+		judge("Q");
+		//if (isMakingBeat) System.out.println(gameMusic.getTime() + " Q");
 	}
 
 	public void releaseQ() {
@@ -131,6 +148,8 @@ public class Game extends Thread {
 
 	public void pressW() {
 		noteRouteWImage = new ImageIcon(getClass().getResource("../img/noteRouteEffect.png")).getImage();
+		judge("W");
+		//if (isMakingBeat) System.out.println(gameMusic.getTime() + " W");
 	}
 
 	public void releaseW() {
@@ -139,6 +158,8 @@ public class Game extends Thread {
 
 	public void pressE() {
 		noteRouteEImage = new ImageIcon(getClass().getResource("../img/noteRouteEffect.png")).getImage();
+		judge("E");
+		//if (isMakingBeat) System.out.println(gameMusic.getTime() + " E");
 	}
 
 	public void releaseE() {
@@ -147,6 +168,8 @@ public class Game extends Thread {
 
 	public void pressR() {
 		noteRouteRImage = new ImageIcon(getClass().getResource("../img/noteRouteEffect.png")).getImage();
+		judge("R");
+		//if (isMakingBeat)  System.out.println(gameMusic.getTime() + " R");
 	}
 
 	public void releaseR() {
@@ -155,6 +178,8 @@ public class Game extends Thread {
 
 	public void pressSPACE() {
 		noteRouteSPACEImage = new ImageIcon(getClass().getResource("../img/noteRouteEffect.png")).getImage();
+		judge("SPACE");
+	//	if (isMakingBeat) System.out.println(gameMusic.getTime() + " SPACE");
 	}
 
 	public void releaseSPACE() {
@@ -163,6 +188,8 @@ public class Game extends Thread {
 
 	public void pressENTER() {
 		noteRouteENTERImage = new ImageIcon(getClass().getResource("../img/noteRouteEffect.png")).getImage();
+		judge("ENTER");
+	//	if (isMakingBeat) System.out.println(gameMusic.getTime() + " ENTER");
 	}
 
 	public void releaseENTER() {
@@ -174,7 +201,7 @@ public class Game extends Thread {
 	}
 
 	public void run() {
-
+		dropNotes();
 	}
 
 	public void pause() {
@@ -184,20 +211,110 @@ public class Game extends Thread {
 	// Terminate thread and turn off the music
 	public void close() {
 		gameMusic.close();
-		this.interrupt();
 	}
 
-	public void dropNotes(String titleName) {
+	public void addBeats(ArrayList<Note> beats) throws Exception {
+		File file;
+		BufferedReader br;
+		String str;
+		int gap = Main.REACH_TIME * 1000;
+		file = null;
+		switch(this.titleName) {
+		case "Joakim Karud - Might Love" :
+			if(this.difficulty == "Easy") {
+				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Might Love(Easy).txt");
+			}
+			
+			if(this.difficulty == "Hard") {
+				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Might Love(Hard).txt");
+			}
+			br = new BufferedReader(new FileReader(file));
+			while((str = br.readLine()) != null) {
+				int time = Integer.parseInt(str.split(" ")[0]);
+				String key = str.split(" ")[1];
+				beats.add(new Note(time - gap,Note.NoteName.valueOf(key),Note.NoteType.NORMAL,Note.NoteLength.SHORT));
+			}
+			br.close();
+			break;
+		case "Vendredi - Follow me" :
+			if(this.difficulty == "Easy") {
+				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Follow me(Easy).txt");
+			}
+			
+			if(this.difficulty == "Hard") {
+				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Follow me(Hard).txt");
+			}
+			br = new BufferedReader(new FileReader(file));
+			while((str = br.readLine()) != null) {
+				int time = Integer.parseInt(str.split(" ")[0]);
+				String key = str.split(" ")[1];
+				beats.add(new Note(time - gap,Note.NoteName.valueOf(key),Note.NoteType.NORMAL,Note.NoteLength.SHORT));
+			}
+			br.close();
+			break;
+		case "Ant Saunders - Yellow Hearts" :
+			if(this.difficulty == "Easy") {
+				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Yellow Hearts(Easy).txt");
+			}
+			
+			if(this.difficulty == "Hard") {
+				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Yellow Hearts(Hard).txt");
+			}
+			br = new BufferedReader(new FileReader(file));
+			while((str = br.readLine()) != null) {
+				int time = Integer.parseInt(str.split(" ")[0]);
+				String key = str.split(" ")[1];
+				beats.add(new Note(time - gap,Note.NoteName.valueOf(key),Note.NoteType.NORMAL,Note.NoteLength.SHORT));
+			}
+			br.close();
+			break;
+		}
+	}
+
+	public void dropNotes() {
 		/*
-		noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.SHORT, 332));
-		noteList.add(new Note(Note.NoteType.SPECIAL, Note.NoteLength.SHORT, 436));
-		noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.LONG, 540));
-		noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.SHORT, 644));
-		noteList.add(new Note(Note.NoteType.SPECIAL, Note.NoteLength.LONG, 748));
-		noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.SHORT, 852));
-		*/
-		Note note = new Note(Note.NoteType.SPECIAL, Note.NoteLength.SHORT, 436);
-		note.start();
-		noteList.add(note);
+		 * noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.SHORT, 332));
+		 * noteList.add(new Note(Note.NoteType.SPECIAL, Note.NoteLength.SHORT, 436));
+		 * noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.LONG, 540));
+		 * noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.SHORT, 644));
+		 * noteList.add(new Note(Note.NoteType.SPECIAL, Note.NoteLength.LONG, 748));
+		 * noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.SHORT, 852));
+		 */
+
+		ArrayList<Note> beats = new ArrayList<Note>();
+		try {
+			addBeats(beats);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		int i = 0;
+		while (i < beats.size() && !isInterrupted()) {
+			boolean dropped = false;
+			if (beats.get(i).getNoteTime() <= gameMusic.getTime()) {
+				beats.get(i).start();
+				noteList.add(beats.get(i));
+				i++;
+				dropped = true;
+			}
+			if (!dropped) {
+				try {
+					Thread.sleep(5);
+				} catch (Exception e) {
+					e.printStackTrace();
+					this.interrupt();
+				}
+			}
+		}
+	}
+	
+	public void judge(String input) {
+		for(int i = 0; i < noteList.size(); i++) {
+			Note note = noteList.get(i);
+			if(input.equals(note.getNoteName().name())) {
+				note.judge();
+				break;
+			}
+		}
 	}
 }
