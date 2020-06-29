@@ -29,9 +29,16 @@ public class Game extends Thread {
 	private Image noteRouteRImage = new ImageIcon(getClass().getResource("../img/noteRoute.png")).getImage();
 	private Image noteRouteSPACEImage = new ImageIcon(getClass().getResource("../img/noteRoute.png")).getImage();
 	private Image noteRouteENTERImage = new ImageIcon(getClass().getResource("../img/noteRoute.png")).getImage();
-	private Image normalFlareImage = new ImageIcon(getClass().getResource("../img/NormalFlareImage.png")).getImage();
-	//private Image specialFlareImage = new ImageIcon(getClass().getResource("../img/SpecialFlareImage.png")).getImage();
-	
+	private Image keyPadQImage = new ImageIcon(getClass().getResource("../img/KeypadBasic.png")).getImage();
+	private Image keyPadWImage = new ImageIcon(getClass().getResource("../img/KeypadBasic.png")).getImage();
+	private Image keyPadEImage = new ImageIcon(getClass().getResource("../img/KeypadBasic.png")).getImage();
+	private Image keyPadRImage = new ImageIcon(getClass().getResource("../img/KeypadBasic.png")).getImage();
+	private Image keyPadSPACEImage = new ImageIcon(getClass().getResource("../img/KeypadBasic.png")).getImage();
+	private Image keyPadENTERImage = new ImageIcon(getClass().getResource("../img/KeypadBasic.png")).getImage();
+
+	private Image normalFlareImage;
+	private Image judgeImage;
+
 	private InputMap im;
 	private ActionMap am;
 
@@ -40,6 +47,9 @@ public class Game extends Thread {
 	private String musicTitle;
 	private Music gameMusic;
 
+	private int beatScore;
+	private int beatCombo;
+	
 	private ArrayList<Note> noteList = new ArrayList<Note>();
 
 	private boolean isMakingBeat = true;
@@ -74,15 +84,19 @@ public class Game extends Thread {
 
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
-			if(note.isProceeded()) {
+			if (note.isProceeded()) {
+				if(note.isMissed()) {
+					normalFlareImage = null;
+					judgeImage = null;
+					beatCombo = 0;
+				}
 				noteList.remove(i);
 				i--;
-			}
-			else {
+			} else {
 				note.screenDraw(g);
 			}
 		}
-		
+
 		g.drawImage(gameInfoImage, 0, 0, null);
 		g.setColor(Color.WHITE);
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -99,8 +113,17 @@ public class Game extends Thread {
 		g.drawString("ENTER", 860, 700);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Elephant", Font.BOLD, 30));
-		g.drawString("000000", 1000, 40);
-		g.drawImage(normalFlareImage, 320, 370, null);
+		g.drawString(Integer.toString(beatScore), 1000, 40);
+		g.setColor(Color.YELLOW);
+		if(beatScore > 0) g.drawString(Integer.toString(beatCombo), 600, 290);
+		g.drawImage(judgeImage, 440, 300, null);
+		g.drawImage(normalFlareImage, 420, 340, null);
+		g.drawImage(keyPadQImage, 332, 680, null);
+		g.drawImage(keyPadWImage, 436, 680, null);
+		g.drawImage(keyPadEImage, 540, 680, null);
+		g.drawImage(keyPadRImage, 644, 680, null);
+		g.drawImage(keyPadSPACEImage, 748, 680, null);
+		g.drawImage(keyPadENTERImage, 852, 680, null);
 	}
 
 	public void addKeyBind(JComponent component) {
@@ -169,7 +192,7 @@ public class Game extends Thread {
 	public void pressR() {
 		noteRouteRImage = new ImageIcon(getClass().getResource("../img/noteRouteEffect.png")).getImage();
 		judge("R");
-		//if (isMakingBeat)  System.out.println(gameMusic.getTime() + " R");
+		//if (isMakingBeat) System.out.println(gameMusic.getTime() + " R");
 	}
 
 	public void releaseR() {
@@ -179,7 +202,7 @@ public class Game extends Thread {
 	public void pressSPACE() {
 		noteRouteSPACEImage = new ImageIcon(getClass().getResource("../img/noteRouteEffect.png")).getImage();
 		judge("SPACE");
-	//	if (isMakingBeat) System.out.println(gameMusic.getTime() + " SPACE");
+		//if (isMakingBeat) System.out.println(gameMusic.getTime() + " SPACE");
 	}
 
 	public void releaseSPACE() {
@@ -189,7 +212,7 @@ public class Game extends Thread {
 	public void pressENTER() {
 		noteRouteENTERImage = new ImageIcon(getClass().getResource("../img/noteRouteEffect.png")).getImage();
 		judge("ENTER");
-	//	if (isMakingBeat) System.out.println(gameMusic.getTime() + " ENTER");
+		//if (isMakingBeat) System.out.println(gameMusic.getTime() + " ENTER");
 	}
 
 	public void releaseENTER() {
@@ -219,52 +242,61 @@ public class Game extends Thread {
 		String str;
 		int gap = Main.REACH_TIME * 1000;
 		file = null;
-		switch(this.titleName) {
-		case "Joakim Karud - Might Love" :
-			if(this.difficulty == "Easy") {
-				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Might Love(Easy).txt");
+		switch (this.titleName) {
+		case "Joakim Karud - Might Love":
+			if (this.difficulty == "Easy") {
+				file = new File(
+						"C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Might Love(Easy).txt");
 			}
-			
-			if(this.difficulty == "Hard") {
-				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Might Love(Hard).txt");
+
+			if (this.difficulty == "Hard") {
+				file = new File(
+						"C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Might Love(Hard).txt");
 			}
 			br = new BufferedReader(new FileReader(file));
-			while((str = br.readLine()) != null) {
+			while ((str = br.readLine()) != null) {
 				int time = Integer.parseInt(str.split(" ")[0]);
 				String key = str.split(" ")[1];
-				beats.add(new Note(time - gap,Note.NoteName.valueOf(key),Note.NoteType.NORMAL,Note.NoteLength.SHORT));
+				beats.add(
+						new Note(time - gap, Note.NoteName.valueOf(key), Note.NoteType.NORMAL, Note.NoteLength.SHORT));
 			}
 			br.close();
 			break;
-		case "Vendredi - Follow me" :
-			if(this.difficulty == "Easy") {
-				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Follow me(Easy).txt");
+		case "Vendredi - Follow me":
+			if (this.difficulty == "Easy") {
+				file = new File(
+						"C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Follow me(Easy).txt");
 			}
-			
-			if(this.difficulty == "Hard") {
-				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Follow me(Hard).txt");
+
+			if (this.difficulty == "Hard") {
+				file = new File(
+						"C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Follow me(Hard).txt");
 			}
 			br = new BufferedReader(new FileReader(file));
-			while((str = br.readLine()) != null) {
+			while ((str = br.readLine()) != null) {
 				int time = Integer.parseInt(str.split(" ")[0]);
 				String key = str.split(" ")[1];
-				beats.add(new Note(time - gap,Note.NoteName.valueOf(key),Note.NoteType.NORMAL,Note.NoteLength.SHORT));
+				beats.add(
+						new Note(time - gap, Note.NoteName.valueOf(key), Note.NoteType.NORMAL, Note.NoteLength.SHORT));
 			}
 			br.close();
 			break;
-		case "Ant Saunders - Yellow Hearts" :
-			if(this.difficulty == "Easy") {
-				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Yellow Hearts(Easy).txt");
+		case "Ant Saunders - Yellow Hearts":
+			if (this.difficulty == "Easy") {
+				file = new File(
+						"C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Yellow Hearts(Easy).txt");
 			}
-			
-			if(this.difficulty == "Hard") {
-				file = new File("C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Yellow Hearts(Hard).txt");
+
+			if (this.difficulty == "Hard") {
+				file = new File(
+						"C:\\Users\\Luke\\eclipse-workspace\\VisualSoundProject\\src\\beat\\beat - Yellow Hearts(Hard).txt");
 			}
 			br = new BufferedReader(new FileReader(file));
-			while((str = br.readLine()) != null) {
+			while ((str = br.readLine()) != null) {
 				int time = Integer.parseInt(str.split(" ")[0]);
 				String key = str.split(" ")[1];
-				beats.add(new Note(time - gap,Note.NoteName.valueOf(key),Note.NoteType.NORMAL,Note.NoteLength.SHORT));
+				beats.add(
+						new Note(time - gap, Note.NoteName.valueOf(key), Note.NoteType.NORMAL, Note.NoteLength.SHORT));
 			}
 			br.close();
 			break;
@@ -272,15 +304,6 @@ public class Game extends Thread {
 	}
 
 	public void dropNotes() {
-		/*
-		 * noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.SHORT, 332));
-		 * noteList.add(new Note(Note.NoteType.SPECIAL, Note.NoteLength.SHORT, 436));
-		 * noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.LONG, 540));
-		 * noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.SHORT, 644));
-		 * noteList.add(new Note(Note.NoteType.SPECIAL, Note.NoteLength.LONG, 748));
-		 * noteList.add(new Note(Note.NoteType.NORMAL, Note.NoteLength.SHORT, 852));
-		 */
-
 		ArrayList<Note> beats = new ArrayList<Note>();
 		try {
 			addBeats(beats);
@@ -307,14 +330,43 @@ public class Game extends Thread {
 			}
 		}
 	}
-	
+
 	public void judge(String input) {
-		for(int i = 0; i < noteList.size(); i++) {
+		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
-			if(input.equals(note.getNoteName().name())) {
-				note.judge();
+			if (input.equals(note.getNoteName().name())) {
+				judgeEvent(note.judge());
 				break;
 			}
 		}
+	}
+
+	public void judgeEvent(String judge) {
+		if (!judge.equals("None")) {
+			normalFlareImage = new ImageIcon(getClass().getResource("../img/FlareImage.png")).getImage();
+			switch (judge) {
+			case "Perfect":
+				judgeImage = new ImageIcon(getClass().getResource("../img/PerefectImageJudge.png")).getImage();
+				beatScore += 800;
+				++beatCombo;
+				break;
+			case "Late":
+				judgeImage = new ImageIcon(getClass().getResource("../img/LateImageJudge.png")).getImage();
+				beatScore += 0;
+				beatCombo = 0;
+				break;
+			case "Good":
+				judgeImage = new ImageIcon(getClass().getResource("../img/GoodImageJudge.png")).getImage();
+				beatScore += 400;
+				++beatCombo;
+				break;
+			}
+		}
+	
+		else if(judge.equals("None")) {
+			judgeImage = null;
+			normalFlareImage = null;
+		}
+		System.out.println(judge);
 	}
 }

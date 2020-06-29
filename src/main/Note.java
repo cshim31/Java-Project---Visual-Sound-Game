@@ -32,7 +32,7 @@ public class Note extends Thread {
 	private int x;
 	private int y = 660 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME;
 	private boolean isProceeded = false;
-	
+	private boolean isMissed = false;
 	public Note(int noteTime, NoteName noteName, NoteType noteType, NoteLength noteLength) {
 		this.noteTime = noteTime;
 		this.noteName = noteName;
@@ -116,6 +116,12 @@ public class Note extends Thread {
 	public boolean isProceeded() {
 		return isProceeded;
 	}
+	public boolean isMissed() {
+		return isMissed;
+	}
+	public void missifyNote() {
+		this.isMissed = true;
+	}
 	public void close() {
 		this.isProceeded = true;
 	}
@@ -146,6 +152,7 @@ public class Note extends Thread {
 		y += Main.NOTE_SPEED;
 		if(y > 800) {
 			close();
+			missifyNote();
 		}
 		if(y >= 660) {
 			normalBeatImage = null;
@@ -153,17 +160,25 @@ public class Note extends Thread {
 		}
 	}
 
-	public void judge() {
-		if(y >= 720) {
-			System.out.println("Missed");
+	public String judge() {
+		if(y >= 710) {
+			close();
+			missifyNote();
+			return "Late";
 		}
-		else if(y >= 630) {
-			System.out.println("Perfect");
+		else if(y >= 610) {
+			close();
+			return "Perfect";
 		}
-		else if(y >= 540) {
-			System.out.println("Good");
+		else if(y >= 500) {
+			close();
+			return "Good";
 		}
+		
+		close();
+		return "None";
 	}
+	
 	public void run() {
 		try {
 			while (true) {
