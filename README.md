@@ -5,4 +5,9 @@ This is open source rhythm game project created in Java.
 > git clone https://github.com/cshim31/Visual-Sound.git
 
 # FEATURES
-* Various Music
+* Flexible screen switching
+* Beat combo and score feature
+* Optimized beat tapping judgement
+* Refine game screen and components
+
+
