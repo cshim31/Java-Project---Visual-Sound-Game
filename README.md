@@ -15,6 +15,7 @@ This is open source rhythm game project created in Java. Layout and Components a
 * Refine game screen and components
 
 # HOW TO RUN
-> git clone https://github.com/cshim31/Visual-Sound.git
+> git clone https://github.com/cshim31/Visual-Sound.git <br/>
+Once cloned, open an IDE and compile the project.
 
 
