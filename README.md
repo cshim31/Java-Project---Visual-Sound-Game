@@ -1,21 +1,33 @@
-# Visual-Sound-Game
-This is open source rhythm game project created in Java. Layout and Components are added by GUI to create 2D rhythm game. <br/>
+<p align="center">
+ <img src = "src/img/githubImage.png" alt = "Screenshot of a 2D rhythm game" style="width:500px;height:300px;"/>
+</p>
 
-<img src = "src/img/githubImage.png" alt = "Screenshot of a 2D rhythm game" style = "max-width:100%;"/>
+<p align="center">
+ <strong>This is open source rhythm game using Java.</strong>
+</div>
 
-# INSTALLATION 
- In order to properly compile the program, you need to import JLayer library in JavaZoom. <br/> <br/>
- Library can be downloaded in official website <br/> <br/>
- Link : http://www.javazoom.net/javalayer/javalayer.html <br/> <br/>
+## Getting Started
+### Building and installing
 
-# FEATURES
-* Flexible screen switching
-* Beat combo and score feature
-* Optimized beat tapping judgement
-* Refine game screen and components
+#### Prereqs:
+- [JLayer] (http://www.javazoom.net/javalayer/javalayer.html) to enable support for playing game music
+- A java compiler (Java 15.0.1+)
 
-# HOW TO RUN
-> git clone https://github.com/cshim31/Visual-Sound.git <br/>
-Once cloned, open an IDE and compile the project.
+<p> After downloading and extracting a source, Clone the repository.</p>
+    
+    git clone https://github.com/cshim31/Visual-Sound.git
+  
+<p> Build the visual sound. </p> 
+
+    mkdir build && cd build
+    cmake ..
+    cmake --build . [--config Release]
+
+## Features
+- Flexible screen switching
+- Beat combo and score feature
+- Optimized beat tapping judgement
+- Refine game screen and components
+
 
 
