@@ -10,7 +10,7 @@
 ### Building and installing
 
 #### Prereqs:
-- [JLayer] (http://www.javazoom.net/javalayer/javalayer.html) to enable support for playing game music
+- [JLayer](http://www.javazoom.net/javalayer/javalayer.html) to enable support for playing game music
 - A java compiler (Java 15.0.1+)
 
 <p> After downloading and extracting a source, Clone the repository.</p>
