@@ -4,7 +4,7 @@
 
 <p align="center">
  <strong>This is open source rhythm game using Java.</strong>
-</div>
+</p>
 
 ## Getting Started
 ### Building and installing
