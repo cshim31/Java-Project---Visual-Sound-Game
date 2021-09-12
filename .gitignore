@@ -1,0 +1,17 @@
+# project generated
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+
+# cmake 
+*.cmake
+/CMakeFiles
+
+# build
+.classpath
+.project
+
+# other
+/.settings
+/x64
