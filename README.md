@@ -23,17 +23,18 @@
     cmake ..
     cmake --build . [--config Release]
 
-## Features
+## System
 ### What does a checkmark mean?
 
-</p>When an item is checkmarked, it means the implementation is complete. Uncheckmarked means implementation is in bug or planned in future. 
+</p>When an item is checkmarked, it means the implementation is complete. Uncheckmarked means implementation is planned in future. 
 
-- [x] Flexible screen switching
-- [x] Beat combo and score feature
-- [x] Optimized beat tapping judgement
-- [x] Refine game screen and components
-- [ ] Bug: Beat node disappearing when key is pressed early before node hits keypad
-- [ ] Bug: Music playing bad quality at special case
+#### Features
+ - [x] Flexible screen switching
+ - [x] Beat combo and score feature
+ - [x] Optimized beat tapping judgement
+ - [x] Refine game screen and components
+ - [ ] Player Health 
 
-
-
+#### Bugs
+ - [ ] Bug: Beat node disappearing when key is pressed early before node hits keypad
+ - [ ] Bug: Music playing bad quality at special case
