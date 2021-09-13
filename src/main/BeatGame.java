@@ -79,16 +79,16 @@ public class BeatGame extends JFrame {
 	public static Game game = new Game();
 
 	public BeatGame() {
-		// Update musics in track list
+		// Add musics in track list
 		trackList.add(new Track("Joakim Karud - Mighty Love (preview).jpg", "MightyLove.png",
 				"Mighty Love - Joakim Karud (preview).mp3", "Joakim Karud - Mighty Love.jpg",
 				"Mighty Love - Joakim Karud.mp3", "Joakim Karud - Might Love"));
-		trackList.add(new Track("Vendredi - Follow Me (preview).jpg", "YellowHeartsTitle.png",
+		trackList.add(new Track("Vendredi - Follow Me (preview).jpg", "FollowmeTitle.png",
 				"Follow Me - Vendredi (preview).mp3", "Vendredi - Follow Me.jpg", "Follow Me - Vendredi.mp3",
 				"Vendredi - Follow me"));
-		trackList.add(new Track("Ant Saunders - Yellow Hearts (preview).jpg", "FollowmeTitle.png",
-				"Ant Saunders - Yellow Hearts (preview).mp3", "Ant Saunders - Yellow Hearts.jpg",
-				"Ant Saunders - Yellow Hearts.mp3", "Ant Saunders - Yellow Hearts"));
+		trackList.add(new Track("Adventures - A Himitsu(preview).jpg", "YellowHeartsTitle.png",
+				"Adventures - A Himitsu (preview).mp3", "Adventures - A Himitsu.jpg",
+				"Adventures - A Himitsu.mp3", "Adventures – A Himitsu"));
 		
 		setUndecorated(true);
 		setTitle("Visual Sound");
