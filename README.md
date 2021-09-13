@@ -4,7 +4,7 @@
 
 <p align="center">
  <strong>This is open source rhythm game using Java.</strong>
-</div>
+</p>
 
 ## Getting Started
 ### Building and installing
@@ -23,11 +23,18 @@
     cmake ..
     cmake --build . [--config Release]
 
-## Features
-- Flexible screen switching
-- Beat combo and score feature
-- Optimized beat tapping judgement
-- Refine game screen and components
+## System
+### What does a checkmark mean?
 
+</p>When an item is checkmarked, it means the implementation is complete. Uncheckmarked means implementation is planned in future. 
 
+#### Features
+ - [x] Flexible screen switching
+ - [x] Beat combo and score feature
+ - [x] Optimized beat tapping judgement
+ - [x] Refine game screen and components
+ - [ ] Player Health 
 
+#### Bugs
+ - [ ] Bug: Beat node disappearing when key is pressed early before node hits keypad
+ - [ ] Bug: Music playing bad quality at special case
