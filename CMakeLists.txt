@@ -8,7 +8,9 @@ else()
 	message(WARNING "Couldn't find Java")
 endif()
 
+# serach for JLayer
 find_jar(JLAYER_JAR "jlayer-1.0.1")
+message("jlayer.jar is at ${JLAYER_JAR}")
 
 enable_testing()
 
@@ -16,13 +18,13 @@ set(project VisualSound)
 
 project(${project} NONE)
 
-set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.6" "-target" "1.6")
+#set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.6" "-target" "1.6")
 
-set(CMAKE_JAVA_INCLUDE_PATH /src/main)
+set(CMAKE_JAVA_INCLUDE_PATH ${PROJECT_SOURCE_DIR}/src)
 
 add_jar(${project} 
 	SOURCES
-		${CMAKE_JAVA_INCLUDE_PATH}/Main.java 
+		${PROJECT_SOURCE_DIR}/src/main/Main.java 
 	INCLUDE_JARS
 		${JLAYER_JAR})
 

@@ -6,12 +6,16 @@
 
 # cmake 
 *.cmake
+CMakeCache.txt
 /CMakeFiles
 
 # build
 .classpath
 .project
 *.class
+
+# executable
+VisualSound.jar
 
 # other
 /.settings

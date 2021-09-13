@@ -88,7 +88,7 @@ public class BeatGame extends JFrame {
 				"Vendredi - Follow me"));
 		trackList.add(new Track("Adventures - A Himitsu(preview).jpg", "YellowHeartsTitle.png",
 				"Adventures - A Himitsu (preview).mp3", "Adventures - A Himitsu.jpg",
-				"Adventures - A Himitsu.mp3", "Adventures – A Himitsu"));
+				"Adventures - A Himitsu.mp3", "Adventures - A Himitsu"));
 		
 		setUndecorated(true);
 		setTitle("Visual Sound");
