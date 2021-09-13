@@ -19,9 +19,13 @@
   
 <p> Build the visual sound. </p> 
 
-    mkdir build && cd build
-    cmake ..
+    cmake -DJLAYER_JAR="" .
     cmake --build . [--config Release]
+    
+<p> Run the visual sound </p>
+ 
+    java -jar VisualSound.jar
+    
 
 ## System
 ### What does a checkmark mean?
