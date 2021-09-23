@@ -10,7 +10,7 @@
 ### Building and installing
 
 #### Prereqs:
-- [JLayer](https://jar-download.com/artifacts/javazoom) to enable support for playing game music
+- [JLayer](https://github.com/wkpark/JLayer) to enable support for playing game music
 - [Visual Studio 2019+](https://visualstudio.microsoft.com/en/downloads) to enable support for build
 - A java compiler (Java 15.0.1+)
 
