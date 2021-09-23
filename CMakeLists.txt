@@ -1,4 +1,3 @@
-@@ -1,40 +0,0 @@
 cmake_minimum_required(VERSION 3.20.0)
 
 find_package(Java 1.8 REQUIRED)
@@ -21,11 +20,11 @@ project(${project} NONE)
 
 #set(CMAKE_JAVA_COMPILE_FLAGS -source 1.6 -target 1.6)
 
-set(CMAKE_JAVA_INCLUDE_PATH ${PROJECT_SOURCE_DIR}src)
+set(CMAKE_JAVA_INCLUDE_PATH ${PROJECT_SOURCE_DIR}/src)
 
 add_jar(${project} 
 	SOURCES
-		${PROJECT_SOURCE_DIR}srcmainMain.java 
+		${PROJECT_SOURCE_DIR}/src/main/Main.java 
 	INCLUDE_JARS
 		${JLAYER_JAR})
 
