@@ -26,7 +26,7 @@ add_jar(${project}
 	SOURCES
 		${PROJECT_SOURCE_DIR}/src/main/Main.java 
 	INCLUDE_JARS
-		${JLAYER_JAR})
+		${JLAYER_JAR}/src)
 
 install_jar(${project} ${CMAKE_INSTALL_PREFIX})
 
